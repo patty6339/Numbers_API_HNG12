@@ -117,16 +117,16 @@ A simple, interactive frontend has been created to demonstrate the Numbers Class
 - CSS3
 - Vanilla JavaScript
 
+### Frontend Deployment
+
+The frontend is deployed and accessible at:
+- 🌍 Frontend URL: https://numbers-api-frontend-9i9xqtob1-patdevops-projects.vercel.app
+
 ### How to Use
-1. Enter a number in the input field
-2. Click "Classify Number"
-3. View the number's mathematical properties and fun fact
-
-### Deployment
-The frontend can be easily deployed on platforms like Vercel, Netlify, or GitHub Pages.
-
-### Screenshots
-[Add screenshots of your frontend demo here]
+1. Visit the frontend URL
+2. Enter a number in the input field
+3. Click "Classify Number"
+4. View detailed number properties and fun facts!
 
 ## Testing
 
