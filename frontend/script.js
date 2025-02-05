@@ -1,4 +1,5 @@
-const API_URL = 'https://numbers-api-hng-12.vercel.app';
+const API_URL = 'https://numbers-api-hng-12.vercel.app/api/classify-number';
+
 document.addEventListener('DOMContentLoaded', () => {
     const numberInput = document.getElementById('numberInput');
     const classifyBtn = document.getElementById('classifyBtn');
@@ -47,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             resultContent.innerHTML = `
                 <p style="color: red;">
-                    Unable to fetch data. Please check your internet connection.
+                    Unable to fetch data. Please check your internet connection or API endpoint.
                 </p>
             `;
             console.error('Error:', error);
