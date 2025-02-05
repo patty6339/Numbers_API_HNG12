@@ -1,5 +1,4 @@
-const API_URL = 'https://numbers-api-hng-12.vercel.app/api/classify-number';
-
+const API_URL = 'https://numbers-api-hng-12.vercel.app';
 document.addEventListener('DOMContentLoaded', () => {
     const numberInput = document.getElementById('numberInput');
     const classifyBtn = document.getElementById('classifyBtn');
