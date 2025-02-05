@@ -101,6 +101,33 @@ curl https://numbers-api-hng-12.vercel.app/api/classify-number?number=371
 - Open https://numbers-api-hng-12.vercel.app/api/classify-number?number=371
 - Or visit https://numbers-api-hng-12.vercel.app/docs for interactive documentation
 
+## Frontend Demo
+
+A simple, interactive frontend has been created to demonstrate the Numbers Classification API.
+
+### Features
+- Responsive design
+- Real-time number classification
+- Loading spinner
+- Error handling
+- Displays detailed number properties
+
+### Technologies Used
+- HTML5
+- CSS3
+- Vanilla JavaScript
+
+### How to Use
+1. Enter a number in the input field
+2. Click "Classify Number"
+3. View the number's mathematical properties and fun fact
+
+### Deployment
+The frontend can be easily deployed on platforms like Vercel, Netlify, or GitHub Pages.
+
+### Screenshots
+[Add screenshots of your frontend demo here]
+
 ## Testing
 
 - Swagger UI: `/docs`
