@@ -19,8 +19,21 @@ document.addEventListener('DOMContentLoaded', () => {
         resultContent.innerHTML = '';
 
         try {
-            const response = await fetch(`${API_URL}?number=${number}`);
+            console.log(`Fetching data from: ${API_URL}?number=${number}`);
+            
+            const response = await fetch(`${API_URL}?number=${number}`, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            console.log('Response status:', response.status);
+            console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+
             const data = await response.json();
+            console.log('Parsed response data:', data);
 
             // Hide loading spinner
             loadingSpinner.classList.add('hidden');
@@ -40,7 +53,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
                 resultContent.innerHTML = resultHTML;
             } else {
-                resultContent.innerHTML = `<p style="color: red;">${data.message || 'An error occurred'}</p>`;
+                resultContent.innerHTML = `
+                    <p style="color: red;">
+                        API Error: ${data.message || 'Unknown error occurred'}
+                        <br>Status: ${response.status}
+                        <br>Details: ${JSON.stringify(data)}
+                    </p>
+                `;
             }
         } catch (error) {
             // Hide loading spinner
@@ -48,10 +67,12 @@ document.addEventListener('DOMContentLoaded', () => {
             
             resultContent.innerHTML = `
                 <p style="color: red;">
-                    Unable to fetch data. Please check your internet connection or API endpoint.
+                    Network Error: Unable to fetch data.
+                    <br>Error Details: ${error.message}
+                    <br>API URL: ${API_URL}?number=${number}
                 </p>
             `;
-            console.error('Error:', error);
+            console.error('Fetch Error:', error);
         }
     });
 
