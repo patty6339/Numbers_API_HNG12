@@ -20,97 +20,85 @@ Numbers API is a FastAPI-powered microservice that provides comprehensive number
 ## Technologies Used
 
 - **Framework**: FastAPI
-- **HTTP Client**: httpx
-- **Server**: Uvicorn
+- **Language**: Python 3.8+
+- **Dependencies**: 
+  - fastapi
+  - uvicorn
+  - httpx
+  - pydantic
 
-## Prerequisites
+## API Endpoint
 
-- Python 3.8+
-- pip (Python Package Manager)
+**GET** `/api/classify-number`
 
-## Installation
+### Query Parameters
+- `number`: Integer to classify (required)
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/numbers-api.git
-   cd numbers-api
-   ```
+### Response Format
 
-2. Create a virtual environment:
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
-   ```
+**Success (200 OK)**:
+```json
+{
+    "number": 371,
+    "is_prime": false,
+    "is_perfect": false,
+    "properties": ["armstrong", "odd"],
+    "digit_sum": 11,
+    "fun_fact": "371 is an Armstrong number because 3^3 + 7^3 + 1^3 = 371"
+}
+```
 
-3. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+**Error (400 Bad Request)**:
+```json
+{
+    "number": "alphabet",
+    "error": true,
+    "message": "Input must be a valid integer"
+}
+```
 
-## Running the Application
+## Local Setup
 
-### Development Mode
+1. Clone the repository
+```bash
+git clone https://github.com/yourusername/numbers-api.git
+cd numbers-api
+```
+
+2. Create virtual environment
+```bash
+python -m venv myenv
+source myenv/bin/activate  # On Windows: myenv\Scripts\activate
+```
+
+3. Install dependencies
+```bash
+pip install -r requirements.txt
+```
+
+4. Run the server
 ```bash
 uvicorn app.main:app --reload
 ```
 
-### Production Mode
-```bash
-uvicorn app.main:app
-```
+## Deployment
 
-The API will be available at `http://localhost:8000`
+- Deployed on: [Add your deployment platform]
+- Base URL: [Add your deployed API base URL]
 
-## API Endpoint
+## Testing
 
-### Classify Number
-- **Endpoint**: `/api/classify-number`
-- **Method**: GET
-- **Query Parameter**: `number` (integer)
-
-#### Example Request
-```
-GET /api/classify-number?number=153
-```
-
-#### Example Response
-```json
-{
-  "number": 153,
-  "is_prime": false,
-  "is_perfect": false,
-  "properties": ["armstrong", "odd"],
-  "digit_sum": 9,
-  "fun_fact": "153 is an Armstrong number!"
-}
-```
-
-## Project Structure
-```
-numbers_api/
-│
-├── app/
-│   ├── main.py        # FastAPI application
-│   └── utils.py       # Number classification utilities
-│
-├── requirements.txt   # Project dependencies
-└── README.md          # Project documentation
-```
+- Swagger UI: `/docs`
+- ReDoc: `/redoc`
 
 ## Contributing
 
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
 
 ## License
 
-Distributed under the MIT License. See `LICENSE` for more information.
-
-## Contact
-
-Your Name - patty6339@gmail.com
-
-Project Link: [https://github.com/patty6339/numbers-api](See the Project)
+[Choose an appropriate license, e.g., MIT]
