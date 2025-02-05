@@ -84,7 +84,7 @@ uvicorn app.main:app --reload
 ## Deployment
 
 - **Platform**: Vercel
-- **Base URL**: https://numbers-api-hng12.vercel.app
+- **Base URL**: https://numbers-api-hng-12.vercel.app
 - **Endpoints**:
   - Classify Number: `GET /api/classify-number?number=371`
   - Swagger Docs: `/docs`
@@ -94,12 +94,12 @@ uvicorn app.main:app --reload
 
 1. Classify Number 371:
 ```bash
-curl https://numbers-api-hng12.vercel.app/api/classify-number?number=371
+curl https://numbers-api-hng-12.vercel.app/api/classify-number?number=371
 ```
 
 2. Browser Access:
-- Open https://numbers-api-hng12.vercel.app/api/classify-number?number=371
-- Or visit https://numbers-api-hng12.vercel.app/docs for interactive documentation
+- Open https://numbers-api-hng-12.vercel.app/api/classify-number?number=371
+- Or visit https://numbers-api-hng-12.vercel.app/docs for interactive documentation
 
 ## Testing
 
