@@ -43,12 +43,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     <pre>${JSON.stringify(data, null, 2)}</pre>
                     <div>
                         <h3>Number Properties:</h3>
-                        <p>🔢 Number: ${data.number}</p>
-                        <p>🏁 Is Prime: ${data.is_prime ? '✅ Yes' : '❌ No'}</p>
-                        <p>🌟 Is Perfect: ${data.is_perfect ? '✅ Yes' : '❌ No'}</p>
-                        <p>🏷️ Properties: ${data.properties.join(', ')}</p>
-                        <p>➕ Digit Sum: ${data.digit_sum}</p>
-                        <p>💡 Fun Fact: ${data.fun_fact}</p>
+                        <p> Number: ${data.number}</p>
+                        <p> Is Prime: ${data.is_prime ? ' Yes' : ' No'}</p>
+                        <p> Is Perfect: ${data.is_perfect ? ' Yes' : ' No'}</p>
+                        <p> Properties: ${data.properties.join(', ')}</p>
+                        <p> Digit Sum: ${data.digit_sum}</p>
+                        <p> Fun Fact: ${data.fun_fact}</p>
                     </div>
                 `;
                 resultContent.innerHTML = resultHTML;
