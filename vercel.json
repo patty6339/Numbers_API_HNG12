@@ -2,34 +2,30 @@
     "version": 2,
     "builds": [
         {
-            "src": "app/main.py",
+            "src": "app.py",
             "use": "@vercel/python",
             "config": {
                 "maxLambdaSize": "15mb",
-                "runtime": "python3.10",
-                "includeFiles": [
-                    "app/**",
-                    "requirements.txt"
-                ]
+                "runtime": "python3.10"
             }
         }
     ],
     "routes": [
         {
             "src": "/api/classify-number",
-            "dest": "app/main.py"
+            "dest": "app.py"
         },
         {
             "src": "/",
-            "dest": "app/main.py"
+            "dest": "app.py"
         },
         {
             "src": "/docs",
-            "dest": "app/main.py"
+            "dest": "app.py"
         },
         {
             "src": "/redoc",
-            "dest": "app/main.py"
+            "dest": "app.py"
         }
     ],
     "env": {

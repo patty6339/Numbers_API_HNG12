@@ -5,17 +5,7 @@ fastapi==0.109.2
 uvicorn==0.27.0.post1
 
 # HTTP Client
-httpx==0.26.0
-
-# Type Hints and Validation
-pydantic==2.6.1
+requests==2.31.0
 
 # CORS Middleware
 python-multipart==0.0.9
-
-# Optional: Development and Testing
-pytest==8.0.0
-requests==2.31.0
-
-# Optional: Documentation
-python-jose[cryptography]==3.3.0
