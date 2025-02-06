@@ -1,42 +1,21 @@
-# Numbers API
+# Numbers Classification API
 
-## Project Overview
-
-Numbers API is a FastAPI-powered microservice that provides comprehensive number classification and interesting mathematical insights. This API allows you to explore the unique properties of any integer while fetching an entertaining mathematical fact.
+## Overview
+This is a FastAPI-based Numbers Classification API that provides interesting mathematical properties about a given number.
 
 ## Features
+- Classify numbers based on mathematical properties
+- Get fun facts about numbers
+- Supports various number classifications:
+  - Prime numbers
+  - Perfect numbers
+  - Armstrong numbers
+  - Odd/Even numbers
 
-- 🔢 Number Classification
-  - Determine if a number is:
-    - Prime
-    - Perfect
-    - Armstrong number
-  - Identify number properties (even/odd)
-  - Calculate digit sum
+## Endpoint
+`GET /api/classify-number?number={number}`
 
-- 🧠 Fun Facts
-  - Retrieve an interesting mathematical fact about the number using the Numbers API
-
-## Technologies Used
-
-- **Framework**: FastAPI
-- **Language**: Python 3.8+
-- **Dependencies**: 
-  - fastapi
-  - uvicorn
-  - httpx
-  - pydantic
-
-## API Endpoint
-
-**GET** `/api/classify-number`
-
-### Query Parameters
-- `number`: Integer to classify (required)
-
-### Response Format
-
-**Success (200 OK)**:
+### Response Format (200 OK)
 ```json
 {
     "number": 371,
@@ -48,7 +27,7 @@ Numbers API is a FastAPI-powered microservice that provides comprehensive number
 }
 ```
 
-**Error (400 Bad Request)**:
+### Response Format (400 Bad Request)
 ```json
 {
     "number": "alphabet",
@@ -57,18 +36,23 @@ Numbers API is a FastAPI-powered microservice that provides comprehensive number
 }
 ```
 
-## Local Setup
+## Setup and Installation
 
+### Prerequisites
+- Python 3.8+
+- pip
+
+### Installation
 1. Clone the repository
 ```bash
-git clone https://github.com/yourusername/numbers-api.git
-cd numbers-api
+git clone https://github.com/yourusername/Numbers_API_HNG12.git
+cd Numbers_API_HNG12
 ```
 
-2. Create virtual environment
+2. Create a virtual environment
 ```bash
 python -m venv myenv
-source myenv/bin/activate  # On Windows: myenv\Scripts\activate
+source myenv/bin/activate  # On Windows use `myenv\Scripts\activate`
 ```
 
 3. Install dependencies
@@ -76,30 +60,46 @@ source myenv/bin/activate  # On Windows: myenv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-4. Run the server
+4. Run the application
 ```bash
 uvicorn app.main:app --reload
 ```
 
 ## Deployment
+Deployed on Vercel: https://numbers-api-hng-12.vercel.app
 
-- **Platform**: Vercel
-- **Base URL**: https://numbers-api-hng-12.vercel.app
-- **Endpoints**:
-  - Classify Number: `GET /api/classify-number?number=371`
-  - Swagger Docs: `/docs`
-  - ReDoc: `/redoc`
+## Deployment Troubleshooting
+If you encounter deployment issues:
+1. Ensure all dependencies are listed in `requirements.txt`
+2. Check Vercel configuration in `vercel.json`
+3. Verify Python runtime version compatibility
+4. Make sure all necessary files are included in the deployment
 
-### Example API Calls
+### Common Deployment Errors
+- **Import Errors**: Ensure absolute imports are used
+- **Path Issues**: Add parent directory to Python path
+- **Missing Files**: Include all necessary files in Vercel config
 
-1. Classify Number 371:
-```bash
-curl https://numbers-api-hng-12.vercel.app/api/classify-number?number=371
-```
+### Debugging Deployment
+- Use Vercel CLI to test deployment locally
+- Check Vercel deployment logs for specific error messages
 
-2. Browser Access:
-- Open https://numbers-api-hng-12.vercel.app/api/classify-number?number=371
-- Or visit https://numbers-api-hng-12.vercel.app/docs for interactive documentation
+### Recommended Vercel Setup
+- Runtime: Python 3.10
+- Build Command: `pip install -r requirements.txt`
+- Output Directory: Leave blank for Python/FastAPI
+- Install Command: `pip install -r requirements.txt`
+
+## Technologies
+- FastAPI
+- Python
+- httpx (for async HTTP requests)
+
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
 
 ## Frontend Demo
 
@@ -132,15 +132,3 @@ The frontend is deployed and accessible at:
 
 - Swagger UI: `/docs`
 - ReDoc: `/redoc`
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
-
-## License
-
-[Choose an appropriate license, e.g., MIT]

@@ -6,13 +6,29 @@
             "use": "@vercel/python",
             "config": {
                 "maxLambdaSize": "15mb",
-                "runtime": "python3.10"
+                "runtime": "python3.10",
+                "includeFiles": [
+                    "app/**",
+                    "requirements.txt"
+                ]
             }
         }
     ],
     "routes": [
         {
-            "src": "/(.*)",
+            "src": "/api/classify-number",
+            "dest": "app/main.py"
+        },
+        {
+            "src": "/",
+            "dest": "app/main.py"
+        },
+        {
+            "src": "/docs",
+            "dest": "app/main.py"
+        },
+        {
+            "src": "/redoc",
             "dest": "app/main.py"
         }
     ],
