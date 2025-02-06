@@ -1,8 +1,8 @@
 from fastapi import FastAPI, Query, HTTPException, Request
 from fastapi.responses import JSONResponse
-import requests
-from typing import List
 from fastapi.middleware.cors import CORSMiddleware
+from typing import List
+import requests
 
 app = FastAPI()
 
@@ -10,7 +10,7 @@ app = FastAPI()
 origins = [
     "http://localhost",
     "http://localhost:8080",
-    "*",  # Allows requests from any origin (USE WITH CAUTION IN PRODUCTION)
+    "*"
 ]
 
 app.add_middleware(
@@ -48,7 +48,7 @@ def get_fun_fact(n: int) -> str:
         response.raise_for_status()
         return response.text
     except requests.exceptions.RequestException:
-        return "No fun fact available."
+        return f"No fun fact available for {n}"
 
 @app.exception_handler(ValueError)
 async def value_error_handler(request: Request, exc: ValueError):
@@ -59,13 +59,9 @@ async def value_error_handler(request: Request, exc: ValueError):
 
 @app.get("/api/classify-number")
 def classify_number(number: str = Query(..., description="Enter a number")):
-    """
-    API endpoint to classify a number.
-    Accepts numbers in different formats (negative, string, float, etc.).
-    """
-    original_input = number
+    """API endpoint to classify a number."""
     try:
-        # Convert input to a float first to handle decimal numbers
+        # Convert input to float first to handle decimal numbers
         float_number = float(number)
         # Then convert to integer, truncating decimals
         parsed_number = int(float_number)
@@ -96,8 +92,3 @@ def classify_number(number: str = Query(..., description="Enter a number")):
         }
     except ValueError:
         raise ValueError("Invalid input")
-
-# Run the app with Uvicorn
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
