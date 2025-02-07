@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
 import requests
+import math
 
 app = Flask(__name__)
 
@@ -7,10 +8,14 @@ app = Flask(__name__)
 def classify_number():
     num = request.args.get('number')
     
-    if not num or not num.lstrip('-').isdigit():
+    try:
+        num = float(num)
+        if num.is_integer():
+            num = int(num)
+        else:
+            return jsonify({"number": num, "error": True}), 400
+    except (ValueError, TypeError):
         return jsonify({"number": num, "error": True}), 400
-    
-    num = int(num)
     
     properties = []
     if num % 2 == 0:
@@ -46,7 +51,6 @@ def is_perfect(n):
         return False
     divisors_sum = sum(i for i in range(1, n) if n % i == 0)
     return divisors_sum == n
-
 
 def is_armstrong(n):
     return sum(int(d) ** len(str(n)) for d in str(abs(n))) == n
