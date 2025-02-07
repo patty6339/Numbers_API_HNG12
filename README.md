@@ -1,64 +1,82 @@
 # Numbers Classification API
 
-A simple Flask-based API that classifies numbers and provides fun facts about them.
+A versatile Flask-based API that classifies numbers and provides fun facts about them. It can be deployed locally or on AWS Lambda.
 
 ## Project Structure
 ```
-├── .dist/             # Directory for distribution files
-├── app.py             # Main application file containing the Flask API
-├── README.md          # Project documentation
-└── requirements.txt   # Dependencies required to run the application
+├── .dist/                   # Directory for distribution files
+├── app.py                   # Local Flask application
+├── lambda_function.py       # AWS Lambda function handler
+├── README.md                # Project documentation
+└── requirements.txt         # Dependencies for local and cloud deployment
 ```
 
-## Setup and Installation
+## Deployment Options
 
-### **1. Clone the repository**
+### 1. Local Flask Deployment
+
+#### Setup and Installation
 ```sh
-git clone https://github.com/yourusername/numbers_api.git
+# Clone the repository
+git clone https://github.com/patty6339/numbers_api.git
 cd numbers_api
-```
 
-### **2. Create and activate a virtual environment**
-#### On Windows:
-```sh
+# Create and activate a virtual environment
 python -m venv venv
-venv\Scripts\activate
-```
-#### On macOS and Linux:
-```sh
-python3 -m venv venv
-source venv/bin/activate
-```
+source venv/bin/activate  # On Unix/macOS
+venv\Scripts\activate     # On Windows
 
-### **3. Install dependencies**
-```sh
+# Install dependencies
 pip install -r requirements.txt
 ```
 
-## Running the Application
-
-Start the Flask application:
+#### Running the Application
 ```sh
+# Start the Flask development server
 flask run
 ```
+Access the API at [http://127.0.0.1:5000/](http://127.0.0.1:5000/)
 
-By default, Flask runs on `http://127.0.0.1:5000/`. You can access the API using a web browser or an API client like Postman.
+---
+
+### 2. AWS Lambda Deployment
+
+#### Prerequisites
+- AWS Account
+- AWS CLI configured
+- AWS Lambda function created
+
+#### Deployment Steps
+```sh
+# Zip the project contents
+zip -r deployment.zip . -x '*.git*' '*.venv*'
+
+# Upload to AWS Lambda
+aws lambda update-function-code \
+    --function-name NumbersClassificationAPI \
+    --zip-file fileb://deployment.zip
+```
+
+#### Configure Lambda Function
+- **Runtime**: Python 3.9+
+- **Handler**: `lambda_function.lambda_handler`
+- **Trigger**: Add API Gateway as a trigger
+
+---
 
 ## API Endpoints
 
-### **1. Classify a number**
-- **Endpoint:** `/api/classify-number`
-- **Method:** `GET`
-- **Description:** Classifies a number and provides fun facts about it.
-- **Query Parameter:**
-  - `number` (required) → The number to classify.
+### Classify a Number
+- **Endpoint**: `/api/classify-number`
+- **Method**: `GET`
+- **Query Parameter**: `number` (required)
 
-#### Example Request:
-```
-GET http://127.0.0.1:5000/api/classify-number?number=123
+#### Example Request
+```sh
+GET http://your-api-endpoint/api/classify-number?number=123
 ```
 
-#### Example Response:
+#### Example Response
 ```json
 {
   "number": 123,
@@ -70,9 +88,10 @@ GET http://127.0.0.1:5000/api/classify-number?number=123
 }
 ```
 
-## License
-This project is licensed under the **MIT License**.
-
 ---
 
-### 🚀 Happy Coding!
+## License
+This project is licensed under the MIT License.
+
+🚀 Happy Coding!
+
