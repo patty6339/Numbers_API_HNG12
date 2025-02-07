@@ -1,97 +1,99 @@
-# Numbers Classification API
+# Number Classification API
 
-A versatile Flask-based API that classifies numbers and provides fun facts about them. It can be deployed locally or on AWS Lambda.
+A FastAPI-based REST API that analyzes numbers and returns their mathematical properties along with fun facts.
 
-## Project Structure
+## Features
+
+- Determines if a number is prime
+- Determines if a number is perfect
+- Identifies Armstrong numbers
+- Calculates digit sum
+- Provides number properties (odd/even, Armstrong)
+- Includes fun mathematical facts about numbers
+
+## API Specification
+
+### Endpoint
+
 ```
-├── .dist/                   # Directory for distribution files
-├── app.py                   # Local Flask application
-├── lambda_function.py       # AWS Lambda function handler
-├── README.md                # Project documentation
-└── requirements.txt         # Dependencies for local and cloud deployment
-```
-
-## Deployment Options
-
-### 1. Local Flask Deployment
-
-#### Setup and Installation
-```sh
-# Clone the repository
-git clone https://github.com/patty6339/numbers_api.git
-cd numbers_api
-
-# Create and activate a virtual environment
-python -m venv venv
-source venv/bin/activate  # On Unix/macOS
-venv\Scripts\activate     # On Windows
-
-# Install dependencies
-pip install -r requirements.txt
+GET /api/classify-number?number={number}
 ```
 
-#### Running the Application
-```sh
-# Start the Flask development server
-flask run
-```
-Access the API at [http://127.0.0.1:5000/](http://127.0.0.1:5000/)
+### Success Response (200 OK)
 
----
-
-### 2. AWS Lambda Deployment
-
-#### Prerequisites
-- AWS Account
-- AWS CLI configured
-- AWS Lambda function created
-
-#### Deployment Steps
-```sh
-# Zip the project contents
-zip -r deployment.zip . -x '*.git*' '*.venv*'
-
-# Upload to AWS Lambda
-aws lambda update-function-code \
-    --function-name NumbersClassificationAPI \
-    --zip-file fileb://deployment.zip
-```
-
-#### Configure Lambda Function
-- **Runtime**: Python 3.9+
-- **Handler**: `lambda_function.lambda_handler`
-- **Trigger**: Add API Gateway as a trigger
-
----
-
-## API Endpoints
-
-### Classify a Number
-- **Endpoint**: `/api/classify-number`
-- **Method**: `GET`
-- **Query Parameter**: `number` (required)
-
-#### Example Request
-```sh
-GET http://your-api-endpoint/api/classify-number?number=123
-```
-
-#### Example Response
 ```json
 {
-  "number": 123,
-  "is_prime": false,
-  "is_perfect": false,
-  "properties": ["odd"],
-  "digit_sum": 6,
-  "fun_fact": "123 is a fascinating number with unique mathematical properties."
+    "number": 371,
+    "is_prime": false,
+    "is_perfect": false,
+    "properties": ["armstrong", "odd"],
+    "digit_sum": 11,
+    "fun_fact": "371 is an Armstrong number because 3^3 + 7^3 + 1^3 = 371"
 }
 ```
 
----
+### Error Response (400 Bad Request)
+
+```json
+{
+    "number": "alphabet",
+    "error": true
+}
+```
+
+## Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/number-classifier-api.git
+cd number-classifier-api
+```
+
+2. Create a virtual environment and activate it:
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
+
+3. Install dependencies:
+```bash
+pip install fastapi uvicorn requests
+```
+
+## Running Locally
+
+```bash
+uvicorn main:app --reload
+```
+
+The API will be available at `http://localhost:8000`
+
+## Deployment
+
+This API can be deployed to any platform that supports Python applications. Some recommended platforms:
+
+- Heroku
+- DigitalOcean
+- Railway
+- Render
+
+## Testing
+
+You can test the API using curl:
+
+```bash
+curl "http://localhost:8000/api/classify-number?number=371"
+```
+
+Or using the built-in Swagger UI at `/docs`
+
+## Technologies Used
+
+- Python 3.8+
+- FastAPI
+- Uvicorn
+- Numbers API (for fun facts)
 
 ## License
-This project is licensed under the MIT License.
 
-🚀 Happy Coding!
-
+MIT

@@ -1,61 +1,110 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+import math
+import requests
+from typing import List
+import os
+from pydantic import BaseModel
 
-app = Flask(__name__)
-CORS(app)  # Enable CORS
+app = FastAPI(title="Number Classification API")
 
-# Function to check if a number is prime
-def is_prime(n):
+# Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
+)
+
+class ErrorResponse(BaseModel):
+    number: str
+    error: bool = True
+
+class NumberResponse(BaseModel):
+    number: int
+    is_prime: bool
+    is_perfect: bool
+    properties: List[str]
+    digit_sum: int
+    fun_fact: str
+
+def is_prime(n: int) -> bool:
+    """Check if a number is prime."""
     if n < 2:
         return False
-    for i in range(2, int(n ** 0.5) + 1):
+    for i in range(2, int(math.sqrt(n)) + 1):
         if n % i == 0:
             return False
     return True
 
-# Function to check if a number is a perfect number
-def is_perfect(n):
-    return n == sum(i for i in range(1, n) if n % i == 0)
+def is_perfect(n: int) -> bool:
+    """Check if a number is perfect (sum of proper divisors equals the number)."""
+    if n < 2:
+        return False
+    divisors_sum = sum(i for i in range(1, n) if n % i == 0)
+    return divisors_sum == n
 
-# Function to check if a number is an Armstrong number
-def is_armstrong(n):
-    digits = [int(d) for d in str(n)]
-    power = len(digits)
-    return n == sum(d**power for d in digits)
+def is_armstrong(n: int) -> bool:
+    """Check if a number is an Armstrong number."""
+    num_str = str(n)
+    power = len(num_str)
+    return sum(int(digit) ** power for digit in num_str) == n
 
-# Function to generate fun facts
-def get_fun_fact(n):
-    if is_armstrong(n):
-        return f"{n} is an Armstrong number because {' + '.join([f'{d}^{len(str(n))}' for d in str(n)])} = {n}"
-    elif is_prime(n):
-        return f"{n} is a prime number because it has only two divisors: 1 and itself."
-    elif is_perfect(n):
-        return f"{n} is a perfect number because the sum of its proper divisors equals the number."
-    else:
-        return f"{n} is just an interesting number!"
+def get_digit_sum(n: int) -> int:
+    """Calculate the sum of digits."""
+    return sum(int(digit) for digit in str(n))
 
-@app.route('/api/classify-number', methods=['GET'])
-def classify_number():
-    num = request.args.get('number')
-
-    if not num or not num.isdigit():
-        return jsonify({"number": num, "error": True}), 400
-
-    num = int(num)
+def get_properties(n: int) -> List[str]:
+    """Get the properties of a number (armstrong, odd/even)."""
+    properties = []
     
-    response = {
+    # Check Armstrong
+    if is_armstrong(n):
+        properties.append("armstrong")
+    
+    # Check odd/even
+    properties.append("odd" if n % 2 else "even")
+    
+    return properties
+
+def get_fun_fact(n: int) -> str:
+    """Get a fun fact about the number from Numbers API."""
+    try:
+        response = requests.get(f"http://numbersapi.com/{n}/math")
+        if response.status_code == 200:
+            return response.text
+        else:
+            # Fallback fun fact if API fails
+            if is_armstrong(n):
+                digits = str(n)
+                calc = " + ".join(f"{d}^{len(digits)}" for d in digits)
+                return f"{n} is an Armstrong number because {calc} = {n}"
+            return f"{n} is {'even' if n % 2 == 0 else 'odd'}"
+    except:
+        # Fallback fun fact if API is unreachable
+        return f"The number {n} is interesting in its own way!"
+
+@app.get("/api/classify-number", response_model=NumberResponse, responses={400: {"model": ErrorResponse}})
+async def classify_number(number: str):
+    """Classify a number and return its properties."""
+    try:
+        num = int(number)
+    except ValueError:
+        raise HTTPException(
+            status_code=400,
+            detail={"number": number, "error": True}
+        )
+
+    return {
         "number": num,
         "is_prime": is_prime(num),
         "is_perfect": is_perfect(num),
-        "properties": ["odd" if num % 2 else "even"],
-        "digit_sum": sum(int(d) for d in str(num)),
+        "properties": get_properties(num),
+        "digit_sum": get_digit_sum(num),
         "fun_fact": get_fun_fact(num)
     }
 
-    if is_armstrong(num):
-        response["properties"].append("armstrong")
-
-    return jsonify(response)
-
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", 8000)))
