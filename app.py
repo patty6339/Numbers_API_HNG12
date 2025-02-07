@@ -33,7 +33,7 @@ def classify_number():
         "is_prime": is_prime(abs(num)) if is_integer else False,  # Primes are only defined for positive integers
         "is_perfect": is_perfect(abs(num)) if is_integer else False,  # Perfect numbers are only defined for positive integers
         "properties": properties,
-        "digit_sum": sum(int(d) for d in str(abs(num))),  # Handle negative numbers
+        "digit_sum": calculate_digit_sum(num),  # Handle floating-point numbers
         "fun_fact": get_fun_fact(num)
     }
     
@@ -60,6 +60,11 @@ def is_armstrong(n):
     digits = [int(d) for d in str(abs(n))]  # Handle negative numbers
     num_digits = len(digits)
     return sum(d ** num_digits for d in digits) == abs(n)
+
+def calculate_digit_sum(n):
+    """Calculate the sum of the digits of a number, ignoring the decimal point."""
+    digits = [d for d in str(abs(n)) if d.isdigit()]  # Ignore non-digit characters like '.'
+    return sum(int(d) for d in digits)
 
 def get_fun_fact(n):
     """Generate a fun fact about the number."""
