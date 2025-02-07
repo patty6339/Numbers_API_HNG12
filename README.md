@@ -1,116 +1,79 @@
 # Numbers API
 
-## Project Overview
-
-Numbers API is a FastAPI-powered microservice that provides comprehensive number classification and interesting mathematical insights. This API allows you to explore the unique properties of any integer while fetching an entertaining mathematical fact.
-
-## Features
-
-- 🔢 Number Classification
-  - Determine if a number is:
-    - Prime
-    - Perfect
-    - Armstrong number
-  - Identify number properties (even/odd)
-  - Calculate digit sum
-
-- 🧠 Fun Facts
-  - Retrieve an interesting mathematical fact about the number using the Numbers API
-
-## Technologies Used
-
-- **Framework**: FastAPI
-- **HTTP Client**: httpx
-- **Server**: Uvicorn
-
-## Prerequisites
-
-- Python 3.8+
-- pip (Python Package Manager)
-
-## Installation
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/numbers-api.git
-   cd numbers-api
-   ```
-
-2. Create a virtual environment:
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
-   ```
-
-3. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-## Running the Application
-
-### Development Mode
-```bash
-uvicorn app.main:app --reload
-```
-
-### Production Mode
-```bash
-uvicorn app.main:app
-```
-
-The API will be available at `http://localhost:8000`
-
-## API Endpoint
-
-### Classify Number
-- **Endpoint**: `/api/classify-number`
-- **Method**: GET
-- **Query Parameter**: `number` (integer)
-
-#### Example Request
-```
-GET /api/classify-number?number=153
-```
-
-#### Example Response
-```json
-{
-  "number": 153,
-  "is_prime": false,
-  "is_perfect": false,
-  "properties": ["armstrong", "odd"],
-  "digit_sum": 9,
-  "fun_fact": "153 is an Armstrong number!"
-}
-```
+A simple Flask-based API that classifies numbers and provides fun facts about them.
 
 ## Project Structure
 ```
-numbers_api/
-│
-├── app/
-│   ├── main.py        # FastAPI application
-│   └── utils.py       # Number classification utilities
-│
-├── requirements.txt   # Project dependencies
-└── README.md          # Project documentation
+├── .dist/             # Directory for distribution files
+├── app.py             # Main application file containing the Flask API
+├── README.md          # Project documentation
+└── requirements.txt   # Dependencies required to run the application
 ```
 
-## Contributing
+## Setup and Installation
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+### **1. Clone the repository**
+```sh
+git clone https://github.com/yourusername/numbers_api.git
+cd numbers_api
+```
+
+### **2. Create and activate a virtual environment**
+#### On Windows:
+```sh
+python -m venv venv
+venv\Scripts\activate
+```
+#### On macOS and Linux:
+```sh
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### **3. Install dependencies**
+```sh
+pip install -r requirements.txt
+```
+
+## Running the Application
+
+Start the Flask application:
+```sh
+flask run
+```
+
+By default, Flask runs on `http://127.0.0.1:5000/`. You can access the API using a web browser or an API client like Postman.
+
+## API Endpoints
+
+### **1. Classify a number**
+- **Endpoint:** `/api/classify-number`
+- **Method:** `GET`
+- **Description:** Classifies a number and provides fun facts about it.
+- **Query Parameter:**
+  - `number` (required) → The number to classify.
+
+#### Example Request:
+```
+GET http://127.0.0.1:5000/api/classify-number?number=123
+```
+
+#### Example Response:
+```json
+{
+  "number": 123,
+  "is_prime": false,
+  "is_perfect": false,
+  "properties": ["odd"],
+  "digit_sum": 6,
+  "fun_fact": "123 is a fascinating number with unique mathematical properties."
+}
+```
 
 ## License
+This project is licensed under the **MIT License**.
 
-Distributed under the MIT License. See `LICENSE` for more information.
+---
 
-## Contact
+### 🚀 Happy Coding!
 
-Your Name - patty6339@gmail.com
-
-Project Link: [https://github.com/patty6339/numbers-api](See the Project)
