@@ -1,3 +1,6 @@
-fastapi==0.109.2
-httpx==0.26.0
-uvicorn==0.27.0.post1
+# Core Framework
+Flask==3.0.2
+Flask-CORS==4.0.0
+
+# Additional Dependencies
+Werkzeug==3.0.1

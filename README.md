@@ -1,4 +1,4 @@
-# Numbers API
+# Numbers Classification API
 
 A simple Flask-based API that classifies numbers and provides fun facts about them.
 
@@ -76,4 +76,3 @@ This project is licensed under the **MIT License**.
 ---
 
 ### 🚀 Happy Coding!
-
