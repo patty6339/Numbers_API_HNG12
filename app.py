@@ -27,18 +27,18 @@ def is_perfect(n):
 
 def is_armstrong(n):
     """Check if a number is an Armstrong number."""
-    digits = [int(d) for d in str(abs(n))]  # Handle negative numbers
+    digits = [int(d) for d in str(abs(int(n)))]  # Handle negative numbers and floating points
     num_digits = len(digits)
-    return sum(d ** num_digits for d in digits) == abs(n)
+    return sum(d ** num_digits for d in digits) == abs(int(n))
 
 def digit_sum(n):
     """Calculate the sum of the digits of a number."""
-    return sum(int(d) for d in str(abs(n)))  # Handle negative numbers
+    return sum(int(d) for d in str(abs(int(n))))  # Handle negative numbers and floating points
 
 def get_fun_fact(n):
     """Generate a fun fact about the number."""
     if is_armstrong(n):
-        return f"{n} is an Armstrong number because {' + '.join(f'{d}^{len(str(abs(n)))}' for d in str(abs(n)))} = {abs(n)}"
+        return f"{n} is an Armstrong number because {' + '.join(f'{d}^{len(str(abs(int(n))))}' for d in str(abs(int(n))))} = {abs(int(n))}"
     return f"{n} is a fascinating number with unique mathematical properties."
 
 @app.route('/api/classify-number', methods=['GET'])
@@ -49,7 +49,8 @@ def classify_number():
     try:
         # Convert the input to a float first, then to an integer if it's a whole number
         number = float(number)
-        if number.is_integer():
+        is_integer = number.is_integer()
+        if is_integer:
             number = int(number)
     except (ValueError, TypeError):
         return jsonify({
@@ -61,16 +62,16 @@ def classify_number():
     properties = []
     if is_armstrong(number):
         properties.append("armstrong")
-    if number % 2 == 0:
+    if is_integer and number % 2 == 0:
         properties.append("even")
-    else:
+    elif is_integer:
         properties.append("odd")
     
     # Prepare response
     response = {
         "number": number,
-        "is_prime": is_prime(abs(number)) if isinstance(number, int) else False,  # Primes are only defined for integers
-        "is_perfect": is_perfect(abs(number)) if isinstance(number, int) else False,  # Perfect numbers are only defined for integers
+        "is_prime": is_prime(abs(number)) if is_integer else False,  # Primes are only defined for integers
+        "is_perfect": is_perfect(abs(number)) if is_integer else False,  # Perfect numbers are only defined for integers
         "properties": properties,
         "digit_sum": digit_sum(number),
         "fun_fact": get_fun_fact(number)
