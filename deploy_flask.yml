@@ -1,0 +1,30 @@
+- name: Deploy Flask API
+  hosts: flask_servers
+  become: true
+  tasks:
+    - name: Update package lists
+      yum:
+        name: "*"
+        state: latest
+    
+    - name: Install dependencies
+      yum:
+        name: [python3, python3-pip, git]
+        state: present
+
+    - name: Clone Flask API repository
+      git:
+        repo: "git@github.com:patty6339/Numbers_API_HNG12.git"
+        dest: "/home/ec2-user/flask_api"
+        version: main
+        accept_hostkey: yes
+
+    - name: Install Python dependencies
+      pip:
+        requirements: /home/ec2-user/flask_api/requirements.txt
+        executable: pip3
+
+    - name: Start Flask API
+      shell: "nohup python3 /home/ec2-user/flask_api/main.py > /home/ec2-user/flask.log 2>&1 &"
+      async: 10
+      poll: 0
