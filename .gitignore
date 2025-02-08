@@ -43,3 +43,6 @@ Thumbs.db
 *.bak
 *.tmp
 .vercel
+
+# terraform files
+.terraform/
