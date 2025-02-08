@@ -1,7 +1,11 @@
-fastapi==0.109.2
-uvicorn==0.27.1
+flask==3.0.0
 requests==2.31.0
-pydantic==2.6.1
-python-dotenv==1.0.1
+gunicorn==21.2.0        # Production WSGI HTTP Server
+python-dotenv==1.0.1    # For environment variable management
+pytest==8.0.0           # For testing
 typing-extensions==4.9.0
-starlette==0.36.3
+
+# Optional but recommended for a robust Flask application
+flask-cors==4.0.0       # Handle Cross-Origin Resource Sharing
+marshmallow==3.20.1     # Data validation and serialization
+python-json-logger==2.0.7  # Structured logging

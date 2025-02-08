@@ -1,99 +1,188 @@
 # Number Classification API
 
-A FastAPI-based REST API that analyzes numbers and returns their mathematical properties along with fun facts.
+This is a Flask-based API that classifies a given number and provides interesting mathematical properties, such as whether the number is prime, perfect, or an Armstrong number. It also includes a fun fact about the number using the Numbers API.
 
 ## Features
 
-- Determines if a number is prime
-- Determines if a number is perfect
-- Identifies Armstrong numbers
-- Calculates digit sum
-- Provides number properties (odd/even, Armstrong)
-- Includes fun mathematical facts about numbers
+### Number Classification:
+- Checks if the number is prime.
+- Checks if the number is perfect.
+- Checks if the number is an Armstrong number.
+- Determines if the number is even or odd.
+- Calculates the sum of the digits of the number.
 
-## API Specification
+### Fun Fact:
+- Retrieves a fun fact about the number using the Numbers API.
 
-### Endpoint
+### Input Validation:
+- Accepts both integer and floating-point numbers.
+- Handles negative numbers.
+- Returns a `400 Bad Request` for invalid inputs.
 
-```
-GET /api/classify-number?number={number}
-```
+## API Endpoint
 
-### Success Response (200 OK)
+### **GET** `/api/classify-number?number=<number>`
 
+#### Parameters
+- `number`: The number to classify (can be an integer, floating-point, or negative number).
+
+### Response (`200 OK`)
 ```json
 {
-    "number": 371,
+    "number": 153,
     "is_prime": false,
     "is_perfect": false,
     "properties": ["armstrong", "odd"],
-    "digit_sum": 11,
-    "fun_fact": "371 is an Armstrong number because 3^3 + 7^3 + 1^3 = 371"
+    "digit_sum": 9,
+    "fun_fact": "153 is the smallest number which can be expressed as the sum of cubes of its digits."
 }
 ```
 
-### Error Response (400 Bad Request)
-
+### Response (`400 Bad Request`)
 ```json
 {
-    "number": "alphabet",
+    "number": "abc",
     "error": true
 }
 ```
 
-## Installation
+## How to Run the API
 
+### Prerequisites
+- Python 3.x
+- Flask (`pip install flask`)
+- Requests (`pip install requests`)
+
+### Steps
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/number-classifier-api.git
-cd number-classifier-api
+git clone <repository-url>
+cd <repository-folder>
 ```
-
-2. Create a virtual environment and activate it:
+2. Install dependencies:
 ```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
 ```
-
-3. Install dependencies:
+3. Run the Flask application:
 ```bash
-pip install fastapi uvicorn requests
+python app.py
 ```
-
-## Running Locally
-
+4. The API will be available at:
 ```bash
-uvicorn main:app --reload
+http://localhost:5000/api/classify-number?number=<your-number>
 ```
 
-The API will be available at `http://localhost:8000`
+## Example Requests
+
+### Integer
+```bash
+curl "http://localhost:5000/api/classify-number?number=153"
+```
+**Response:**
+```json
+{
+    "number": 153,
+    "is_prime": false,
+    "is_perfect": false,
+    "properties": ["armstrong", "odd"],
+    "digit_sum": 9,
+    "fun_fact": "153 is the smallest number which can be expressed as the sum of cubes of its digits."
+}
+```
+
+### Floating-Point Number
+```bash
+curl "http://localhost:5000/api/classify-number?number=12.2"
+```
+**Response:**
+```json
+{
+    "number": 12.2,
+    "is_prime": false,
+    "is_perfect": false,
+    "properties": [],
+    "digit_sum": 5,
+    "fun_fact": "No interesting fact available."
+}
+```
+
+### Negative Number
+```bash
+curl "http://localhost:5000/api/classify-number?number=-371"
+```
+**Response:**
+```json
+{
+    "number": -371,
+    "is_prime": false,
+    "is_perfect": false,
+    "properties": ["armstrong", "odd"],
+    "digit_sum": 11,
+    "fun_fact": "-371 is an Armstrong number because 3^3 + 7^3 + 1^3 = 371."
+}
+```
+
+### Invalid Input
+```bash
+curl "http://localhost:5000/api/classify-number?number=abc"
+```
+**Response:**
+```json
+{
+    "number": "abc",
+    "error": true
+}
+```
 
 ## Deployment
 
-This API can be deployed to any platform that supports Python applications. Some recommended platforms:
-
-- Heroku
-- DigitalOcean
-- Railway
-- Render
-
-## Testing
-
-You can test the API using curl:
-
+### Local Deployment
+Run the Flask application using:
 ```bash
-curl "http://localhost:8000/api/classify-number?number=371"
+python app.py
 ```
 
-Or using the built-in Swagger UI at `/docs`
+### Production Deployment
+Use a production-ready server like Gunicorn:
+```bash
+pip install gunicorn
+gunicorn app:app
+```
+Deploy to a cloud platform like AWS, Heroku, or Render.
 
-## Technologies Used
+## Code Structure
+- `app.py`: The main Flask application.
+- `classify_number`: The API endpoint that classifies the number.
+- `is_prime`: Checks if a number is prime.
+- `is_perfect`: Checks if a number is perfect.
+- `is_armstrong`: Checks if a number is an Armstrong number.
+- `calculate_digit_sum`: Calculates the sum of the digits of a number.
+- `get_fun_fact`: Retrieves a fun fact about the number using the Numbers API.
 
-- Python 3.8+
-- FastAPI
-- Uvicorn
-- Numbers API (for fun facts)
+## Dependencies
+- **Flask**: Web framework for Python.
+- **Requests**: HTTP library for making API requests to Numbers API.
+
+## Contributing
+1. Fork the repository.
+2. Create a new branch:
+```bash
+git checkout -b feature/your-feature-name
+```
+3. Commit your changes:
+```bash
+git commit -m "Add your feature"
+```
+4. Push to the branch:
+```bash
+git push origin feature/your-feature-name
+```
+5. Open a pull request.
 
 ## License
+This project is licensed under the MIT License. See the LICENSE file for details.
 
-MIT
+## Acknowledgments
+- **Numbers API** for providing fun facts about numbers.
+- **Flask** for the web framework.
+
