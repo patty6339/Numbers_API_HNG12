@@ -1,35 +1,45 @@
-from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
-import math
+from flask import Flask, jsonify, request
 import requests
-from typing import List
-import os
-from pydantic import BaseModel
+import math
 
-app = FastAPI(title="Number Classification API")
+app = Flask(__name__)
 
-# Configure CORS
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # Allows all origins
-    allow_credentials=True,
-    allow_methods=["*"],  # Allows all methods
-    allow_headers=["*"],  # Allows all headers
-)
+@app.route('/api/classify-number', methods=['GET'])
+def classify_number():
+    num = request.args.get('number')
+    
+    # Input validation
+    try:
+        num = float(num)  # Accept floating-point numbers
+        is_integer = num.is_integer()  # Check if the number is an integer
+        if is_integer:
+            num = int(num)  # Convert to integer if it's a whole number
+    except (ValueError, TypeError):
+        return jsonify({"number": num, "error": True}), 400
+    
+    # Calculate properties
+    properties = []
+    if is_integer and num % 2 == 0:
+        properties.append("even")
+    elif is_integer:
+        properties.append("odd")
+    
+    if is_integer and is_armstrong(num):
+        properties.insert(0, "armstrong")
+    
+    # Prepare response
+    response_data = {
+        "number": num,
+        "is_prime": is_prime(abs(num)) if is_integer else False,  # Primes are only defined for positive integers
+        "is_perfect": is_perfect(abs(num)) if is_integer else False,  # Perfect numbers are only defined for positive integers
+        "properties": properties,
+        "digit_sum": calculate_digit_sum(num),  # Handle floating-point numbers
+        "fun_fact": get_fun_fact(num)
+    }
+    
+    return jsonify(response_data), 200
 
-class ErrorResponse(BaseModel):
-    number: str
-    error: bool = True
-
-class NumberResponse(BaseModel):
-    number: int
-    is_prime: bool
-    is_perfect: bool
-    properties: List[str]
-    digit_sum: int
-    fun_fact: str
-
-def is_prime(n: int) -> bool:
+def is_prime(n):
     """Check if a number is prime."""
     if n < 2:
         return False
@@ -38,73 +48,33 @@ def is_prime(n: int) -> bool:
             return False
     return True
 
-def is_perfect(n: int) -> bool:
-    """Check if a number is perfect (sum of proper divisors equals the number)."""
+def is_perfect(n):
+    """Check if a number is a perfect number."""
     if n < 2:
         return False
-    divisors_sum = sum(i for i in range(1, n) if n % i == 0)
-    return divisors_sum == n
+    divisors = [i for i in range(1, n) if n % i == 0]
+    return sum(divisors) == n
 
-def is_armstrong(n: int) -> bool:
+def is_armstrong(n):
     """Check if a number is an Armstrong number."""
-    num_str = str(n)
-    power = len(num_str)
-    return sum(int(digit) ** power for digit in num_str) == n
+    digits = [int(d) for d in str(abs(n))]  # Handle negative numbers
+    num_digits = len(digits)
+    return sum(d ** num_digits for d in digits) == abs(n)
 
-def get_digit_sum(n: int) -> int:
-    """Calculate the sum of digits."""
-    return sum(int(digit) for digit in str(n))
+def calculate_digit_sum(n):
+    """Calculate the sum of the digits of a number, ignoring the decimal point."""
+    digits = [d for d in str(abs(n)) if d.isdigit()]  # Ignore non-digit characters like '.'
+    return sum(int(d) for d in digits)
 
-def get_properties(n: int) -> List[str]:
-    """Get the properties of a number (armstrong, odd/even)."""
-    properties = []
-    
-    # Check Armstrong
-    if is_armstrong(n):
-        properties.append("armstrong")
-    
-    # Check odd/even
-    properties.append("odd" if n % 2 else "even")
-    
-    return properties
-
-def get_fun_fact(n: int) -> str:
-    """Get a fun fact about the number from Numbers API."""
+def get_fun_fact(n):
+    """Generate a fun fact about the number."""
     try:
-        response = requests.get(f"http://numbersapi.com/{n}/math")
+        response = requests.get(f"http://numbersapi.com/{n}/math?json")
         if response.status_code == 200:
-            return response.text
-        else:
-            # Fallback fun fact if API fails
-            if is_armstrong(n):
-                digits = str(n)
-                calc = " + ".join(f"{d}^{len(digits)}" for d in digits)
-                return f"{n} is an Armstrong number because {calc} = {n}"
-            return f"{n} is {'even' if n % 2 == 0 else 'odd'}"
-    except:
-        # Fallback fun fact if API is unreachable
-        return f"The number {n} is interesting in its own way!"
+            return response.json().get("text", "No interesting fact available.")
+    except requests.exceptions.RequestException:
+        pass
+    return "No interesting fact available."
 
-@app.get("/api/classify-number", response_model=NumberResponse, responses={400: {"model": ErrorResponse}})
-async def classify_number(number: str):
-    """Classify a number and return its properties."""
-    try:
-        num = int(number)
-    except ValueError:
-        raise HTTPException(
-            status_code=400,
-            detail={"number": number, "error": True}
-        )
-
-    return {
-        "number": num,
-        "is_prime": is_prime(num),
-        "is_perfect": is_perfect(num),
-        "properties": get_properties(num),
-        "digit_sum": get_digit_sum(num),
-        "fun_fact": get_fun_fact(num)
-    }
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", 8000)))
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=5000)
